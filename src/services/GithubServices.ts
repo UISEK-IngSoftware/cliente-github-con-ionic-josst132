@@ -1,8 +1,9 @@
 import axios from "axios";
 import { RepositoryItem } from "../interfaces/RepositoryItem";
+import { UserInfo } from "../interfaces/UserInfo";
 
-const GITHUB_API_URL = "https://api.github.com";
-const GITHUB_API_TOKEN = "ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+const GITHUB_API_URL = import.meta.env.VITE_API_URL;
+const GITHUB_API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
 
 export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
     try {
@@ -14,6 +15,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
                 per_page: 100,
                 sort: "created",
                 direction: "desc",
+                affiliation: "owner",
             }
         });
 
@@ -32,3 +34,39 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         return [];
     }
 }
+
+export const createRepository = async (repo: RepositoryItem): Promise<void> => {
+    try {
+        const response = await axios.post(`${GITHUB_API_URL}/user/repos`, repo, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_API_TOKEN}`,
+            }
+        });
+
+        console.log("Repositorio creado:", response.data);
+    } catch (error) {
+        console.error("Error al crear el repositorio:", error);
+    }
+};
+
+export const getUserInfo = async (): Promise<UserInfo | null> => {
+    try {
+        const response = await axios.get(`${GITHUB_API_URL}/user`, {
+            headers: {
+                Authorization: `Bearer ${GITHUB_API_TOKEN}`,
+            }
+        });
+        return response.data as UserInfo;
+    }
+    catch (error) {
+        console.error("Ocurrió un error al obtener la información del usuario:", error);
+        return null;
+        const userNotFound: UserInfo = {
+            login: "undefined",
+            name: "Usuario no encontrado",
+            bio: "No se puede obtener la información del usuario",
+            avatar_url: "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png",
+        }
+        return userNotFound;
+    }
+};
