@@ -3,7 +3,7 @@ import './Tab1.css';
 import RepoItem from '../components/RepoItem';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { useState } from 'react';
-import { fetchRepositories } from '../services/GithubServices';
+import { fetchRepositories } from '../services/GithubService';
 
 const Tab1: React.FC = () => {
   const [repos, setRepos] = useState<RepositoryItem[]>([]);

@@ -3,7 +3,7 @@ import { IonInput, IonTextarea } from '@ionic/react';
 import './Tab2.css';
 import { useHistory } from 'react-router';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
-import { createRepository } from '../services/GithubServices';
+import { createRepository } from '../services/GithubService';
 
 const Tab2: React.FC = () => {
   const history = useHistory();
